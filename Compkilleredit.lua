@@ -349,6 +349,8 @@ Compkiller.Colors = {
 	HighStrokeColor = Color3.fromRGB(100, 200, 180),
 };
 
+
+
 Compkiller.Elements = {
 	Highlight = {},
 	DropHighlight = {},
@@ -7901,338 +7903,341 @@ function Compkiller.new(Config : Window)
 				refresh();
 			end);
 
-			return TabArgs;
+			return Compkiller:_LoadElement(Section , true , TabOpenSignal)
 		end;
 
-		do
-			local CloseWindow = Instance.new("Frame")
-			local UICorner = Instance.new("UICorner")
-			local ImageLabel = Instance.new("ImageLabel")
+		return TabArgs;
+	end;
 
-			CloseWindow.Name = "CloseWindow"
-			CloseWindow.Parent = CompKiller
-			CloseWindow.AnchorPoint = Vector2.new(1, 0)
-			CloseWindow.BackgroundColor3 = Compkiller.Colors.BGDBColor
+	do
+		local CloseWindow = Instance.new("Frame")
+		local UICorner = Instance.new("UICorner")
+		local ImageLabel = Instance.new("ImageLabel")
+
+		CloseWindow.Name = "CloseWindow"
+		CloseWindow.Parent = CompKiller
+		CloseWindow.AnchorPoint = Vector2.new(1, 0)
+		CloseWindow.BackgroundColor3 = Compkiller.Colors.BGDBColor
+
+		table.insert(Compkiller.Elements.BGDBColor,{
+			Element = CloseWindow,
+			Property = 'BackgroundColor3'
+		});
+
+		CloseWindow.BackgroundTransparency = 1
+		CloseWindow.BorderColor3 = Color3.fromRGB(0, 0, 0)
+		CloseWindow.BorderSizePixel = 0
+		CloseWindow.Position = UDim2.new(1, -10, 0, 10)
+		CloseWindow.Size = UDim2.new(0, 0, 0, 23)
+		CloseWindow.ZIndex = 150
+		CloseWindow.ClipsDescendants = true;
+
+		UICorner.CornerRadius = UDim.new(0, 3)
+		UICorner.Parent = CloseWindow
+
+		ImageLabel.Parent = CloseWindow
+		ImageLabel.AnchorPoint = Vector2.new(0.5, 0.5)
+		ImageLabel.BackgroundTransparency = 1.000
+		ImageLabel.BorderColor3 = Color3.fromRGB(0, 0, 0)
+		ImageLabel.BorderSizePixel = 0
+		ImageLabel.Position = UDim2.new(0.5, 0, 0.5, 0)
+		ImageLabel.Size = UDim2.new(0.800000012, 0, 0.800000012, 0)
+		ImageLabel.SizeConstraint = Enum.SizeConstraint.RelativeYY
+		ImageLabel.ZIndex = 151
+		ImageLabel.Image = Config.Logo
+		ImageLabel.ImageTransparency = 1
+		ImageLabel.ClipsDescendants = false;
+
+		local ToggleCloseUI = function(v)
+			ImageLabel.Image = Config.Logo;
+
+			if v then
+				ImageLabel.ClipsDescendants = true;
+
+				Compkiller:_Animation(CloseWindow,TweenInfo.new(0.2),{
+					Size = UDim2.new(0, 45, 0, 23),
+					BackgroundTransparency = 0.025
+				})
+
+				Compkiller:_Animation(ImageLabel,TweenInfo.new(0.2),{
+					ImageTransparency = (ImageLabel:GetAttribute('Hover') and 0.1) or 0.35
+				})
+			else
+				ImageLabel.ClipsDescendants = false;
+
+				Compkiller:_Animation(CloseWindow,TweenInfo.new(0.2),{
+					Size = UDim2.new(0, 0, 0, 23),
+					BackgroundTransparency = 1
+				})
+
+				Compkiller:_Animation(ImageLabel,TweenInfo.new(0.2),{
+					ImageTransparency = 1
+				})
+			end;
+		end;
+
+		function WindowArgs:Watermark()
+			local Watermark = Instance.new("Frame")
+			local UICorner = Instance.new("UICorner")
+			local Logo = Instance.new("Frame")
+			local UICorner_2 = Instance.new("UICorner")
+			local Frame = Instance.new("Frame")
+			local CompLogo = Instance.new("ImageLabel")
+			local WaternarkList = Instance.new("Frame")
+			local UIListLayout = Instance.new("UIListLayout")
+
+			Watermark.Name = "Watermark"
+			Watermark.Parent = CompKiller
+			Watermark.AnchorPoint = Vector2.new(1, 0)
+			Watermark.BackgroundColor3 = Compkiller.Colors.BGDBColor
 
 			table.insert(Compkiller.Elements.BGDBColor,{
-				Element = CloseWindow,
+				Element = Watermark,
 				Property = 'BackgroundColor3'
 			});
 
-			CloseWindow.BackgroundTransparency = 1
-			CloseWindow.BorderColor3 = Color3.fromRGB(0, 0, 0)
-			CloseWindow.BorderSizePixel = 0
-			CloseWindow.Position = UDim2.new(1, -10, 0, 10)
-			CloseWindow.Size = UDim2.new(0, 0, 0, 23)
-			CloseWindow.ZIndex = 150
-			CloseWindow.ClipsDescendants = true;
+			Watermark.BackgroundTransparency = 0.025
+			Watermark.BorderColor3 = Color3.fromRGB(0, 0, 0)
+			Watermark.BorderSizePixel = 0
+			Watermark.Position = UDim2.new(1, -10, 0, 10)
+			Watermark.Size = UDim2.new(0, 45, 0, 23)
+			Watermark.ZIndex = 150
 
-			UICorner.CornerRadius = UDim.new(0, 3)
-			UICorner.Parent = CloseWindow
-
-			ImageLabel.Parent = CloseWindow
-			ImageLabel.AnchorPoint = Vector2.new(0.5, 0.5)
-			ImageLabel.BackgroundTransparency = 1.000
-			ImageLabel.BorderColor3 = Color3.fromRGB(0, 0, 0)
-			ImageLabel.BorderSizePixel = 0
-			ImageLabel.Position = UDim2.new(0.5, 0, 0.5, 0)
-			ImageLabel.Size = UDim2.new(0.800000012, 0, 0.800000012, 0)
-			ImageLabel.SizeConstraint = Enum.SizeConstraint.RelativeYY
-			ImageLabel.ZIndex = 151
-			ImageLabel.Image = Config.Logo
-			ImageLabel.ImageTransparency = 1
-			ImageLabel.ClipsDescendants = false;
-
-			local ToggleCloseUI = function(v)
-				ImageLabel.Image = Config.Logo;
-
-				if v then
-					ImageLabel.ClipsDescendants = true;
-
-					Compkiller:_Animation(CloseWindow,TweenInfo.new(0.2),{
-						Size = UDim2.new(0, 45, 0, 23),
-						BackgroundTransparency = 0.025
-					})
-
-					Compkiller:_Animation(ImageLabel,TweenInfo.new(0.2),{
-						ImageTransparency = (ImageLabel:GetAttribute('Hover') and 0.1) or 0.35
+			ImageLabel:GetPropertyChangedSignal('ClipsDescendants'):Connect(function()
+				if ImageLabel.ClipsDescendants then
+					Compkiller:_Animation(Watermark , TweenInfo.new(0.2),{
+						Position = UDim2.new(1, -60, 0, 10)
 					})
 				else
-					ImageLabel.ClipsDescendants = false;
-
-					Compkiller:_Animation(CloseWindow,TweenInfo.new(0.2),{
-						Size = UDim2.new(0, 0, 0, 23),
-						BackgroundTransparency = 1
-					})
-
-					Compkiller:_Animation(ImageLabel,TweenInfo.new(0.2),{
-						ImageTransparency = 1
+					Compkiller:_Animation(Watermark , TweenInfo.new(0.2),{
+						Position = UDim2.new(1, -10, 0, 10)
 					})
 				end;
-			end;
-
-			function WindowArgs:Watermark()
-				local Watermark = Instance.new("Frame")
-				local UICorner = Instance.new("UICorner")
-				local Logo = Instance.new("Frame")
-				local UICorner_2 = Instance.new("UICorner")
-				local Frame = Instance.new("Frame")
-				local CompLogo = Instance.new("ImageLabel")
-				local WaternarkList = Instance.new("Frame")
-				local UIListLayout = Instance.new("UIListLayout")
-
-				Watermark.Name = "Watermark"
-				Watermark.Parent = CompKiller
-				Watermark.AnchorPoint = Vector2.new(1, 0)
-				Watermark.BackgroundColor3 = Compkiller.Colors.BGDBColor
-
-				table.insert(Compkiller.Elements.BGDBColor,{
-					Element = Watermark,
-					Property = 'BackgroundColor3'
-				});
-
-				Watermark.BackgroundTransparency = 0.025
-				Watermark.BorderColor3 = Color3.fromRGB(0, 0, 0)
-				Watermark.BorderSizePixel = 0
-				Watermark.Position = UDim2.new(1, -10, 0, 10)
-				Watermark.Size = UDim2.new(0, 45, 0, 23)
-				Watermark.ZIndex = 150
-
-				ImageLabel:GetPropertyChangedSignal('ClipsDescendants'):Connect(function()
-					if ImageLabel.ClipsDescendants then
-						Compkiller:_Animation(Watermark , TweenInfo.new(0.2),{
-							Position = UDim2.new(1, -60, 0, 10)
-						})
-					else
-						Compkiller:_Animation(Watermark , TweenInfo.new(0.2),{
-							Position = UDim2.new(1, -10, 0, 10)
-						})
-					end;
-				end)
-
-				UICorner.CornerRadius = UDim.new(0, 3)
-				UICorner.Parent = Watermark
-
-				Logo.Name = "Logo"
-				Logo.Parent = Watermark
-				Logo.AnchorPoint = Vector2.new(1, 0.5)
-				Logo.BackgroundColor3 = Compkiller.Colors.BGDBColor
-
-				table.insert(Compkiller.Elements.BGDBColor,{
-					Element = Logo,
-					Property = 'BackgroundColor3'
-				});
-
-				Logo.BackgroundTransparency = 0.300
-				Logo.BorderColor3 = Color3.fromRGB(0, 0, 0)
-				Logo.BorderSizePixel = 0
-				Logo.Position = UDim2.new(0, 5, 0.5, 0)
-				Logo.Size = UDim2.new(1, 10, 1, 0)
-				Logo.SizeConstraint = Enum.SizeConstraint.RelativeYY
-				Logo.ZIndex = 149
-
-				UICorner_2.CornerRadius = UDim.new(0, 3)
-				UICorner_2.Parent = Logo
-
-				Frame.Parent = Logo
-				Frame.AnchorPoint = Vector2.new(0, 0.5)
-				Frame.BackgroundColor3 = Compkiller.Colors.Highlight
-				Frame.BorderColor3 = Color3.fromRGB(0, 0, 0)
-				Frame.BorderSizePixel = 0
-				Frame.Position = UDim2.new(1, -5, 0.5, 0)
-				Frame.Size = UDim2.new(0, 2, 1, 0)
-				Frame.ZIndex = 151
-
-				table.insert(Compkiller.Elements.Highlight,{
-					Element = Frame,
-					Property = "BackgroundColor3"
-				});
-
-				CompLogo.Name = "CompLogo"
-				CompLogo.Parent = Logo
-				CompLogo.AnchorPoint = Vector2.new(0.5, 0.5)
-				CompLogo.BackgroundTransparency = 1.000
-				CompLogo.BorderColor3 = Color3.fromRGB(0, 0, 0)
-				CompLogo.BorderSizePixel = 0
-				CompLogo.Position = UDim2.new(0.5, -2, 0.5, 0)
-				CompLogo.Size = UDim2.new(0.800000012, 0, 0.800000012, 0)
-				CompLogo.SizeConstraint = Enum.SizeConstraint.RelativeYY
-				CompLogo.ZIndex = 159
-				CompLogo.Image = Config.Logo
-
-				WaternarkList.Name = "WaternarkList"
-				WaternarkList.Parent = Watermark
-				WaternarkList.AnchorPoint = Vector2.new(0.5, 0)
-				WaternarkList.BackgroundTransparency = 1.000
-				WaternarkList.BorderColor3 = Color3.fromRGB(0, 0, 0)
-				WaternarkList.BorderSizePixel = 0
-				WaternarkList.Position = UDim2.new(0.5, 0, 0, 0)
-				WaternarkList.Size = UDim2.new(1, -10, 1, 0)
-				WaternarkList.ZIndex = 155
-				WaternarkList.ClipsDescendants = true
-
-				UIListLayout.Parent = WaternarkList
-				UIListLayout.FillDirection = Enum.FillDirection.Horizontal
-				UIListLayout.SortOrder = Enum.SortOrder.LayoutOrder
-				UIListLayout.VerticalAlignment = Enum.VerticalAlignment.Center
-				UIListLayout.Padding = UDim.new(0, 3)
-
-				local BackFrame = Instance.new("Frame")
-
-				BackFrame.Name = "BackFrame"
-				BackFrame.Parent = Watermark
-				BackFrame.AnchorPoint = Vector2.new(1, 0.5)
-				BackFrame.BackgroundTransparency = 1.000
-				BackFrame.BorderColor3 = Color3.fromRGB(0, 0, 0)
-				BackFrame.BorderSizePixel = 0
-				BackFrame.Position = UDim2.new(1, 0, 0.5, 0)
-				BackFrame.Size = UDim2.new(1, 30, 1, 0)
-
-				Compkiller:_Blur(BackFrame,WindowOpen);
-
-				UIListLayout:GetPropertyChangedSignal('AbsoluteContentSize'):Connect(function()
-					Compkiller:_Animation(Watermark,TweenInfo.new(0.4),{
-						Size = UDim2.new(0, UIListLayout.AbsoluteContentSize.X + 8, 0, 23)
-					});
-				end)
-
-				local Args = {};
-
-				function Args:AddText(Watermark : Watermark)
-					Watermark = Compkiller.__CONFIG(Watermark, {
-						Text = "Watermark",
-						Icon = "info"
-					});
-
-					local Icon = Instance.new("ImageLabel")
-					local TextLabel = Instance.new("TextLabel")
-
-					Icon.Name = "Icon"
-					Icon.Parent = WaternarkList
-					Icon.BackgroundTransparency = 1.000
-					Icon.BorderColor3 = Color3.fromRGB(0, 0, 0)
-					Icon.BorderSizePixel = 0
-					Icon.Size = UDim2.fromOffset(15,15)
-					Icon.SizeConstraint = Enum.SizeConstraint.RelativeYY
-					Icon.ZIndex = 156
-					Icon.Image = Compkiller:_GetIcon(Watermark.Icon);
-
-					TextLabel.Parent = WaternarkList
-					TextLabel.BackgroundTransparency = 1.000
-					TextLabel.BorderColor3 = Color3.fromRGB(0, 0, 0)
-					TextLabel.BorderSizePixel = 0
-					TextLabel.Size = UDim2.new(0, 50, 0.699999988, 0)
-					TextLabel.ZIndex = 156
-					TextLabel.Font = Enum.Font.GothamMedium
-					TextLabel.Text = Watermark.Text
-					TextLabel.TextColor3 = Compkiller.Colors.SwitchColor
-					TextLabel.TextSize = 10.000
-					TextLabel.TextXAlignment = Enum.TextXAlignment.Left
-
-					table.insert(Compkiller.Elements.SwitchColor , {
-						Element = TextLabel,
-						Property = 'TextColor3'
-					});
-
-					local Update = function()
-						local scale = TextService:GetTextSize(TextLabel.Text,TextLabel.TextSize,TextLabel.Font,Vector2.new(math.huge,math.huge));
-
-						TextLabel.Size = UDim2.new(0, scale.X + 2, 0.7, 0)
-					end;
-
-					Update()
-
-					local Arg = {};
-
-					function Arg:SetText(text)
-						TextLabel.Text = text;
-						Update();
-					end;
-
-					function Arg:Visible(v)
-						Icon.Visible = v;
-						TextLabel.Visible = v;
-					end;
-
-					return Arg;
-				end;
-
-				return Args;
-			end;
-
-			function WindowArgs:Toggle(Value: boolean)
-				if WindowArgs.PerformanceMode then
-					MainFrame.Visible = Value;
-				end;
-
-				WindowOpen:Fire(Value);
-
-				if Value then
-					for i,v in next , WindowArgs.Tabs do
-						if v.Root == WindowArgs.SelectedTab then
-							v.Remote:Fire(true);
-						end;
-					end;
-				else
-					for i,v in next , WindowArgs.Tabs do
-						v.Remote:Fire(false);
-					end;
-				end;
-			end;
-
-			function WindowArgs:_ToggleUI()
-				WindowArgs.IsOpen = not WindowArgs.IsOpen;
-
-				WindowArgs:Toggle(WindowArgs.IsOpen)
-			end;
-
-			local Button = Compkiller:_Input(CloseWindow,function()
-				WindowArgs:_ToggleUI()
 			end)
 
-			if not Compkiller:_IsMobile() then
+			UICorner.CornerRadius = UDim.new(0, 3)
+			UICorner.Parent = Watermark
 
-				Compkiller:_Hover(Button,function()
-					ImageLabel:SetAttribute("Hover",true);
-				end , function()
-					ImageLabel:SetAttribute("Hover",false);
-				end);
+			Logo.Name = "Logo"
+			Logo.Parent = Watermark
+			Logo.AnchorPoint = Vector2.new(1, 0.5)
+			Logo.BackgroundColor3 = Compkiller.Colors.BGDBColor
+
+			table.insert(Compkiller.Elements.BGDBColor,{
+				Element = Logo,
+				Property = 'BackgroundColor3'
+			});
+
+			Logo.BackgroundTransparency = 0.300
+			Logo.BorderColor3 = Color3.fromRGB(0, 0, 0)
+			Logo.BorderSizePixel = 0
+			Logo.Position = UDim2.new(0, 5, 0.5, 0)
+			Logo.Size = UDim2.new(1, 10, 1, 0)
+			Logo.SizeConstraint = Enum.SizeConstraint.RelativeYY
+			Logo.ZIndex = 149
+
+			UICorner_2.CornerRadius = UDim.new(0, 3)
+			UICorner_2.Parent = Logo
+
+			Frame.Parent = Logo
+			Frame.AnchorPoint = Vector2.new(0, 0.5)
+			Frame.BackgroundColor3 = Compkiller.Colors.Highlight
+			Frame.BorderColor3 = Color3.fromRGB(0, 0, 0)
+			Frame.BorderSizePixel = 0
+			Frame.Position = UDim2.new(1, -5, 0.5, 0)
+			Frame.Size = UDim2.new(0, 2, 1, 0)
+			Frame.ZIndex = 151
+
+			table.insert(Compkiller.Elements.Highlight,{
+				Element = Frame,
+				Property = "BackgroundColor3"
+			});
+
+			CompLogo.Name = "CompLogo"
+			CompLogo.Parent = Logo
+			CompLogo.AnchorPoint = Vector2.new(0.5, 0.5)
+			CompLogo.BackgroundTransparency = 1.000
+			CompLogo.BorderColor3 = Color3.fromRGB(0, 0, 0)
+			CompLogo.BorderSizePixel = 0
+			CompLogo.Position = UDim2.new(0.5, -2, 0.5, 0)
+			CompLogo.Size = UDim2.new(0.800000012, 0, 0.800000012, 0)
+			CompLogo.SizeConstraint = Enum.SizeConstraint.RelativeYY
+			CompLogo.ZIndex = 159
+			CompLogo.Image = Config.Logo
+
+			WaternarkList.Name = "WaternarkList"
+			WaternarkList.Parent = Watermark
+			WaternarkList.AnchorPoint = Vector2.new(0.5, 0)
+			WaternarkList.BackgroundTransparency = 1.000
+			WaternarkList.BorderColor3 = Color3.fromRGB(0, 0, 0)
+			WaternarkList.BorderSizePixel = 0
+			WaternarkList.Position = UDim2.new(0.5, 0, 0, 0)
+			WaternarkList.Size = UDim2.new(1, -10, 1, 0)
+			WaternarkList.ZIndex = 155
+			WaternarkList.ClipsDescendants = true
+
+			UIListLayout.Parent = WaternarkList
+			UIListLayout.FillDirection = Enum.FillDirection.Horizontal
+			UIListLayout.SortOrder = Enum.SortOrder.LayoutOrder
+			UIListLayout.VerticalAlignment = Enum.VerticalAlignment.Center
+			UIListLayout.Padding = UDim.new(0, 3)
+
+			local BackFrame = Instance.new("Frame")
+
+			BackFrame.Name = "BackFrame"
+			BackFrame.Parent = Watermark
+			BackFrame.AnchorPoint = Vector2.new(1, 0.5)
+			BackFrame.BackgroundTransparency = 1.000
+			BackFrame.BorderColor3 = Color3.fromRGB(0, 0, 0)
+			BackFrame.BorderSizePixel = 0
+			BackFrame.Position = UDim2.new(1, 0, 0.5, 0)
+			BackFrame.Size = UDim2.new(1, 30, 1, 0)
+
+			Compkiller:_Blur(BackFrame,WindowOpen);
+
+			UIListLayout:GetPropertyChangedSignal('AbsoluteContentSize'):Connect(function()
+				Compkiller:_Animation(Watermark,TweenInfo.new(0.4),{
+					Size = UDim2.new(0, UIListLayout.AbsoluteContentSize.X + 8, 0, 23)
+				});
+			end)
+
+			local Args = {};
+
+			function Args:AddText(Watermark : Watermark)
+				Watermark = Compkiller.__CONFIG(Watermark, {
+					Text = "Watermark",
+					Icon = "info"
+				});
+
+				local Icon = Instance.new("ImageLabel")
+				local TextLabel = Instance.new("TextLabel")
+
+				Icon.Name = "Icon"
+				Icon.Parent = WaternarkList
+				Icon.BackgroundTransparency = 1.000
+				Icon.BorderColor3 = Color3.fromRGB(0, 0, 0)
+				Icon.BorderSizePixel = 0
+				Icon.Size = UDim2.fromOffset(15,15)
+				Icon.SizeConstraint = Enum.SizeConstraint.RelativeYY
+				Icon.ZIndex = 156
+				Icon.Image = Compkiller:_GetIcon(Watermark.Icon);
+
+				TextLabel.Parent = WaternarkList
+				TextLabel.BackgroundTransparency = 1.000
+				TextLabel.BorderColor3 = Color3.fromRGB(0, 0, 0)
+				TextLabel.BorderSizePixel = 0
+				TextLabel.Size = UDim2.new(0, 50, 0.699999988, 0)
+				TextLabel.ZIndex = 156
+				TextLabel.Font = Enum.Font.GothamMedium
+				TextLabel.Text = Watermark.Text
+				TextLabel.TextColor3 = Compkiller.Colors.SwitchColor
+				TextLabel.TextSize = 10.000
+				TextLabel.TextXAlignment = Enum.TextXAlignment.Left
+
+				table.insert(Compkiller.Elements.SwitchColor , {
+					Element = TextLabel,
+					Property = 'TextColor3'
+				});
+
+				local Update = function()
+					local scale = TextService:GetTextSize(TextLabel.Text,TextLabel.TextSize,TextLabel.Font,Vector2.new(math.huge,math.huge));
+
+					TextLabel.Size = UDim2.new(0, scale.X + 2, 0.7, 0)
+				end;
+
+				Update()
+
+				local Arg = {};
+
+				function Arg:SetText(text)
+					TextLabel.Text = text;
+					Update();
+				end;
+
+				function Arg:Visible(v)
+					Icon.Visible = v;
+					TextLabel.Visible = v;
+				end;
+
+				return Arg;
 			end;
 
-			table.insert(WindowArgs.THREADS,task.spawn(function()
-				while true do task.wait(0.15)
-					if Compkiller:_IsMobile() then
-						ToggleCloseUI(true);
+			return Args;
+		end;
 
-						if WindowArgs.IsOpen then
-							Compkiller:_Animation(ImageLabel,TweenInfo.new(0.2),{
-								ImageTransparency = 0.35
-							});
+		function WindowArgs:Toggle(Value: boolean)
+			if WindowArgs.PerformanceMode then
+				MainFrame.Visible = Value;
+			end;
 
-							ImageLabel:GetAttribute("Hover",false);
-						else
-							ImageLabel:GetAttribute("Hover",true);
+			WindowOpen:Fire(Value);
 
-							Compkiller:_Animation(ImageLabel,TweenInfo.new(0.2),{
-								ImageTransparency = 0.1
-							});
-						end;
-					else
-						if not WindowArgs.IsOpen then
-							ToggleCloseUI(true);
-						else
-							ToggleCloseUI(false);
-						end
+			if Value then
+				for i,v in next , WindowArgs.Tabs do
+					if v.Root == WindowArgs.SelectedTab then
+						v.Remote:Fire(true);
 					end;
-				end
-			end));
-
-			UserInputService.InputBegan:Connect(function(Input,Typing)
-				if not Typing and (Input.KeyCode == Config.Keybind or Input.KeyCode.Name == Config.Keybind) then
-					WindowArgs:_ToggleUI()
 				end;
+			else
+				for i,v in next , WindowArgs.Tabs do
+					v.Remote:Fire(false);
+				end;
+			end;
+		end;
+
+		function WindowArgs:_ToggleUI()
+			WindowArgs.IsOpen = not WindowArgs.IsOpen;
+
+			WindowArgs:Toggle(WindowArgs.IsOpen)
+		end;
+
+		local Button = Compkiller:_Input(CloseWindow,function()
+			WindowArgs:_ToggleUI()
+		end)
+
+		if not Compkiller:_IsMobile() then
+
+			Compkiller:_Hover(Button,function()
+				ImageLabel:SetAttribute("Hover",true);
+			end , function()
+				ImageLabel:SetAttribute("Hover",false);
 			end);
 		end;
+
+		table.insert(WindowArgs.THREADS,task.spawn(function()
+			while true do task.wait(0.15)
+				if Compkiller:_IsMobile() then
+					ToggleCloseUI(true);
+
+					if WindowArgs.IsOpen then
+						Compkiller:_Animation(ImageLabel,TweenInfo.new(0.2),{
+							ImageTransparency = 0.35
+						});
+
+						ImageLabel:GetAttribute("Hover",false);
+					else
+						ImageLabel:GetAttribute("Hover",true);
+
+						Compkiller:_Animation(ImageLabel,TweenInfo.new(0.2),{
+							ImageTransparency = 0.1
+						});
+					end;
+				else
+					if not WindowArgs.IsOpen then
+						ToggleCloseUI(true);
+					else
+						ToggleCloseUI(false);
+					end
+				end;
+			end
+		end));
+
+		UserInputService.InputBegan:Connect(function(Input,Typing)
+			if not Typing and (Input.KeyCode == Config.Keybind or Input.KeyCode.Name == Config.Keybind) then
+				WindowArgs:_ToggleUI()
+			end;
+		end);
+	end;
 
 	function WindowArgs:Update(config: WindowUpdate)
 		config = config or {};
