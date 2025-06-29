@@ -323,6 +323,7 @@ local CurrentCamera = workspace.CurrentCamera;
 
 local Compkiller = {
 	Version = '1.6',
+	Logo = "rbxassetid://120245531583106",
 	Windows = {},
 	Scale = {
 		Window = UDim2.new(0, 456,0, 499),
@@ -5084,6 +5085,7 @@ function Compkiller.new(Config : Window)
 	Config = Compkiller.__CONFIG(Config , {
 		Name = "Fate Hub",
 		Keybind = "Insert",
+		Logo = Compkiller.Logo;
 		Scale = Compkiller.Scale.Window,
 		TextSize = 15
 	});
